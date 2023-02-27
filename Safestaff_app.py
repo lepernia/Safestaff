@@ -69,20 +69,23 @@ employee_attrition.head(10)
 
 
 # In[9]:
-
-col1, col2, col3 = st.columns([1,2,1])
-col1.markdown("Bienvenidos a Safestaff")
-col2.markdown("Introduce las características del empleado")
-    
 #### Tile For the Web App
+image = Image.open("logo_safestaff.png")
+st.image(image,use_column_width=True)
+
+#col1, col2, col3 = st.columns([1,2,1])
+#col1.markdown("# Bienvenidos a Safestaff")
+#col2.markdown("# Introduce las características del empleado")
+    
 st.write(
          """
-         # SafeStaff  
-         Aplicación para predecir el abandono del personal de tu organización
+         # Aplicación para predecir el abandono del personal de tu organización #
          """)
 if st.button("Quienes somos"):
+    image2 = Image.open("Logo_EAE.png")
+    st.image(image2,use_column_width=True)
     st.write("""
-        Name: Grupo de creadores - EAE Business School
+        Name: Grupo de creadores - Proyecto EAE Business School
             
         Huwen Ely Armone Petrovich 
         
@@ -92,25 +95,11 @@ if st.button("Quienes somos"):
         
         Diego Ortíz Boyano 
         
-        Leonardo Enrique Pernía Espinoza
+        Leonardo Pernía Espinoza
          """)
-  
-    image2 = Image.open("Logo_EAE.png")
-    st.image(image2,use_column_width=True)
-         
-
 
 # In[12]:
-#[theme]
-st.color_picker(primaryColor="#31aeec",
-backgroundColor="#d0d9e0",
-secondaryBackgroundColor="#96afe0",
-textColor="#1b2a79")
 
-    
-## Display
-image = Image.open("logo_safestaff.png")
-st.image(image,use_column_width=True)
 
 ### Subtitile
 
@@ -140,9 +129,9 @@ print(left['dept'].value_counts())
 ## Chart
 fig1,ax= plt.subplots(figsize=(12,5))
 ax.bar(left['dept'].value_counts().index,left['dept'].value_counts().values)
-plt.ylabel("Number of Employee who have left")
-plt.xlabel("Departments")
-plt.title("What departments are they from?")
+plt.ylabel("Nro. empleados que han abandonado la organización")
+plt.xlabel("Departamentos")
+plt.title("Volumen de empleados por departamento")
 plt.grid()
 st.pyplot(fig1)
 
@@ -165,6 +154,11 @@ le= LabelEncoder()
 
 
 # In[18]:
+
+    ### Subtitile
+st.subheader('Dataset:')
+
+st.dataframe(employee_attrition.sample(frac=1).head(10))
 
 
 
@@ -209,7 +203,7 @@ from sklearn.metrics import accuracy_score,classification_report
 st.subheader(
     
 """
-Evaluation Metrics
+Métricas evaluadas
 """)
 from sklearn.ensemble import RandomForestClassifier
 
@@ -222,7 +216,8 @@ y_pred_rforest = rforest.predict(X_test)
 
 ## Classification Report
 
-st.write("Classification Report:")
+st.write("Resultado de clasificación:")
+
 st.write(classification_report(y_test,y_pred_rforest))
  
 # ### Predicting the Existing Employee with the Probability of leaving
@@ -231,15 +226,15 @@ st.sidebar.subheader(
 Indicar las características del perfil
 """)
 def user_input():
-    Satisfaction_level = st.sidebar.number_input("Satisfaction level",min_value=0.00, max_value= 0.99,value=0.5)
-    Last_evaluation = st.sidebar.number_input("Last Evaluation",min_value=0.00, max_value= 0.99,value=0.5)
-    number_project =st.sidebar.number_input('Number of project',min_value=0, max_value= 10,value=5)
-    average_montly_hours = st.sidebar.number_input('The average montly hours',min_value=0.00, max_value= 1000.00,value=300.00)
-    time_spend_company  = st.sidebar.number_input('Time spend in company',min_value=0, max_value= 20,value=5)
-    Work_accident =st.sidebar.selectbox('Work accident',(0, 1))
-    promotion_last_5years = st.sidebar.selectbox('Promotion last 5 years',(0, 1))
-    dept = st.sidebar.selectbox('Department',("sales","technical","support","IT","hr","accounting","marketing","product_mng","randD","mangement"))
-    Salary =  st.sidebar.selectbox('Salary Level ',("low","medium","high"))
+    Satisfaction_level = st.sidebar.number_input("Nivel de satisfacción",min_value=0.00, max_value= 0.99,value=0.5)
+    Last_evaluation = st.sidebar.number_input("Última evaluación",min_value=0.00, max_value= 0.99,value=0.5)
+    number_project =st.sidebar.number_input('Numero de proyectos',min_value=0, max_value= 10,value=5)
+    average_montly_hours = st.sidebar.number_input('Promedio horas trabajadas',min_value=0.00, max_value= 1000.00,value=300.00)
+    time_spend_company  = st.sidebar.number_input('Antiguedad',min_value=0, max_value= 20,value=5)
+    Work_accident =st.sidebar.selectbox('Accidentes laborales',(0, 1))
+    promotion_last_5years = st.sidebar.selectbox('Nro. promociones ultimos 5 años',(0, 1))
+    dept = st.sidebar.selectbox('Departamento',("Ventas","Técnico","Soporte","IT","RRHH","Contabilidad","Marketing","Producción","randD","Administración"))
+    Salary =  st.sidebar.selectbox('Nivel salarial',("low","medium","high"))
     
     ### Dictionaries of Input
     input_user= {"Satisfaction_level":Satisfaction_level ,"Last_evaluation":Last_evaluation, "number_project":number_project,"average_montly_hours":average_montly_hours,"time_spend_company":time_spend_company,"Work_accident":Work_accident,"promotion_last_5years":promotion_last_5years, "dept":dept,"Salary":Salary}
@@ -268,17 +263,17 @@ for col in input_value.columns:
 
 print('{} columns were label encoded.'.format(le1_count))
 
-if st.sidebar.button("Predict"):
+if st.sidebar.button("Predecir"):
     Prediction = rforest.predict(input_value)
     if Prediction == 0:
-        result = pd.DataFrame({"Churn":Prediction,"Info":"The Employee will not Leave the Ogarnization"})
+        result = pd.DataFrame({"Churn":Prediction,"Info":"El empleado no dejaría la organización"})
     else:
-        result = pd.DataFrame({"Churn":Prediction,"Info":"The Employee wil Leave the Ogarnization"})                      
+        result = pd.DataFrame({"Churn":Prediction,"Info":"El empleado dejará la organización"})                      
     
     st.write("""
-    # The Result of the Classification:
+    # Resultado de la clasificación:
     """)
-    st.write("Attrition : ")  
+    st.write(" Desgaste: ")  
     st.dataframe(result)
                                 
 
