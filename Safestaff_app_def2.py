@@ -251,9 +251,6 @@ plt.title("Volumen de empleados por departamento")
 plt.grid()
 st.pyplot(fig1)
 
-
-st.sidebar.header('Ingrese los valores de entrada')
-
 from sklearn.metrics import accuracy_score, classification_report
 
 # #### b) Random forest
@@ -475,7 +472,13 @@ st.pyplot(fig1.figure)
 
 
 # ### Predicting the Existing Employee with the Probability of leaving
+# Mostrar el gráfico en Streamlit con un tamaño reducido
+
+st.sidebar.image("logo_safestaff.png", use_column_width=True)
+st.sidebar.header('Ingrese los valores de entrada')    
 st.sidebar.subheader("""Indicar las características del perfil""")
+#### Tile For the Web App
+
 def user_input():
     satisfaction_level = st.sidebar.number_input("Nivel de satisfacción",min_value=1, max_value= 5,value=2)
     last_evaluation = st.sidebar.number_input("Última evaluación",min_value=1, max_value= 5,value=3)
