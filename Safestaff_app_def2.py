@@ -269,12 +269,210 @@ rforest.fit(x_train,y_train)
 
 ## Testing the Model
 y_pred_rforest = rforest.predict(x_train)
-                        
-## 3er Modelo Clustering Clasificación de empleado por clustering
 
+#Cambiamos la variable categorida ordinal (salary) por 1 (low), 2 (medium) y 3 (high)
+# creamos un diccionario para mapear los valores de la columna categorica salario con sus valores binarios
 
+mapeo = {'low': 1, 'medium': 2, 'high': 3}
 
+df['salary'] = df['salary'].map(mapeo)
+
+df.replace({'salary': mapeo})
+
+df.head(5)
+
+# Para las categoricas no ordinales crearemos variables dummies usando one-hot encoding
+
+dummys = pd.get_dummies(df.Department, prefix='Department')
+
+dummys.head()
+                      
+################ 3er Modelo Clustering Clasificación de empleado por clustering
+
+# In[] ### 3er. Modelo Kmeans - clustering 
+
+st.header(
+   """Atributos con mayor relación""")
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+import streamlit as st
+
+# carga de los datos
+
+df_clust = pd.read_csv('HR_comma_sep.csv', sep=";")
+df_clust.head(5)
     
+#Vamos a reducir el número de variables agrupando technical, support e IT bajo el mismo nombre de IT
+
+df_clust['Department'] = df_clust['Department'].replace(['technical', 'support'], 'IT')
+
+#Cambiamos la variable categorida ordinal (salary) por 1 (low), 2 (medium) y 3 (high)
+# creamos un diccionario para mapear los valores de la columna categorica salario con sus valores binarios
+
+mapeo = {'low': 1, 'medium': 2, 'high': 3}
+
+df_clust['salary'] = df_clust['salary'].map(mapeo)
+
+df_clust.replace({'salary': mapeo})
+
+df_clust.head(5)
+
+# Para las categoricas no ordinales crearemos variables dummies usando one-hot encoding
+
+dummys = pd.get_dummies(df.Department, prefix='Department')
+
+dummys.head()
+
+# unimos nuestro df original con las nuevas feature dummies creadas y eliminamos la antigua columna de departamento
+
+df_clust = pd.concat([df_clust, dummys], axis = 1)
+
+df_clust.drop('Department', axis = 1)
+
+#df_clust.columns.values
+#df_clust.drop('Department', axis = 1)
+
+# Vamos a comenzar por seleccionar las columnas que utilizaremos en la segmentación de empleados
+import seaborn as sns
+sns.set()
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+import seaborn as sns
+import streamlit as st
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+
+
+df_clust = pd.read_csv('HR_comma_sep.csv', sep=";")
+
+cluster_data = df_clust[['satisfaction_level', 'last_evaluation', 'number_project', 'average_montly_hours', 'time_spend_company', 'Work_accident', 'promotion_last_5years', 'salary']]
+#plt.figure(figsize=(12,9))
+fig1 = sns.heatmap(cluster_data.corr(),annot=True)
+plt.title('Correlation Heatmap',fontsize=14)
+plt.yticks(rotation =0)
+
+st.pyplot(fig1.figure)
+
+
+#data = pd.read_csv('cluster_data.csv')
+#corr_matrix = data.corr()
+#fig = sns.heatmap(corr_matrix)
+
+# =============================================================================
+# # Para K Means aplicamos una estandarizacion a los valores de nuestro dataset con el objetivo de que todas las variables tengan el mismo peso
+# 
+# scaler = StandardScaler()
+# 
+# clusters_std= scaler.fit_transform(cluster_data)
+# 
+# # añadimos los titulos de las columna
+# 
+# clusters_std = pd.DataFrame(data = clusters_std, columns = cluster_data.columns)
+# 
+# # Para saber el numero optimo de clusters usamos el metodo del codo
+# 
+# WCSS = []
+# for i in range(1,20):
+#     model = KMeans(n_clusters = i,init = 'k-means++')
+#     model.fit(clusters_std)
+#     WCSS.append(model.inertia_)
+# fig = plt.figure(figsize = (7,7))
+# plt.plot(range(1,20),WCSS, linewidth=4, markersize=12,marker='o',color = 'green')
+# plt.xticks(np.arange(20))
+# plt.xlabel("Number of clusters")
+# plt.ylabel("WCSS")
+# plt.show()
+# 
+# 
+# #Configuramos nuestro k means
+# 
+# kmeans = KMeans(n_clusters = 5, init = 'k-means++', random_state = 42)
+# kmeans = kmeans.fit(clusters_std)
+# cluster_data.loc[:,"cluster"] = kmeans.labels_
+# cluster_data.head(5)
+# 
+# # Para obtener los centroides del cluster utilizamos el siguiente método
+# 
+# centroides = kmeans.cluster_centers_
+# 
+# # Este método nos devuelve un array de dimensiones NxK, siendo N el número de atributos y k el número de clasuters. 
+# #centroides
+# 
+# # Construimos una tabla para conocer mejor las características del centroide de cada cluster.
+# 
+# indices=['centroide_1','centroide_2','centroide_3','centroide_4', 'centroide_5']
+# atributos = ['satisfaction_level', 'last_evaluation', 'number_project', 'average_montly_hours', 'time_spend_company', 'Work_accident', 'promotion_last_5years', 'salary']
+# df_clust=pd.DataFrame(data=centroides,index=indices,columns= [atributos])
+# 
+# cluster_analysis = cluster_data.groupby(['cluster']).mean()
+# cluster_analysis
+# 
+# #vamos a hacer PCA
+# #Usamos el fragmento del dataset sin estandarizar valores
+# 
+# from sklearn.decomposition import PCA
+# 
+# pca = PCA(n_components = 2)
+# cluster_data_pca = pd.DataFrame(pca.fit_transform(cluster_data_org))
+# 
+# cluster_data_pca
+# 
+# clusters_pca_components = pd.DataFrame(pca.components_, columns = atributos)
+# clusters_pca_components
+# 
+# # el PCA nos muestra que las dos features que más correlación producen son las horas mensuales trabajadas (variable 0) 
+# # y el nivel de satisfacción (1)
+# 
+# # Utilizamos el método del codo para determinar el número óptimo de clusters
+# 
+# # =============================================================================
+# WCSS = []
+# for i in range(1,20):
+#    model = KMeans(n_clusters = i,init = 'k-means++')
+#    model.fit(cluster_data_pca)
+#    WCSS.append(model.inertia_)
+# # fig = plt.figure(figsize = (7,7))
+# # plt.plot(range(1,20),WCSS, linewidth=4, markersize=12,marker='o',color = 'green')
+# # plt.xticks(np.arange(20))
+# # plt.xlabel("Number of clusters")
+# # plt.ylabel("WCSS")
+# # plt.show()
+# # 
+# # 
+# # #Probaremos k means con 4 clusters
+# # 
+# # # Primero hacemos el fit de KMean
+# model = KMeans(n_clusters=4)
+# model.fit(cluster_data_pca)
+# # 
+# # # Nos guardamos en labels las etiquetas de cada clusters
+# # labels = model.labels_
+# # 
+# # # Plot the results
+# cluster_data_pca_np = cluster_data_pca.values
+# plt.scatter(cluster_data_pca_np[:, 0], cluster_data_pca_np[:, 1], c=labels)
+# plt.xlabel("First Principal Component")
+# plt.ylabel("Second Principal Component")
+# # 
+# centroides_pca = model.cluster_centers_
+# # 
+# # # Construimos una tabla para conocer mejor las características del centroide de cada cluster.
+# indices=['centroide_1','centroide_2','centroide_3','centroide_4']
+# atributos = ['pca_0','pca_1']
+# df_clust=pd.DataFrame(data=centroides_pca,index=indices,columns= [atributos])
+# df_clust
+# # =============================================================================
+# =============================================================================
+
+
+
+##########################
+
 
 # ### Predicting the Existing Employee with the Probability of leaving
 st.sidebar.subheader("""Indicar las características del perfil""")
