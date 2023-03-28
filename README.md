@@ -1,95 +1,22 @@
-EMPLOYEE ATTRITION WEB APPLICATION USING PYTHON AND STREAMLIT SHARING.
+MÁSTER UNIVERSITARIO EN BIG DATA & ANALYTICS TRABAJO FINAL DE MÁSTER
+Conceptualización y desarrollo de una solución de people analytics: SafeStaff
+AUTORES:
+Huwen Ely Arnone Petrovich (huwen.arnone@gmail.com) Laura María Extremera Díez (lauraext@hotmail.com)
+Silvia Patricia Fernández Jaudenes (sfjaudenes@hotmail.com) Diego Ortiz Boyano (ortizboyano@gmail.com)
+Leonardo Enrique Pernía Espinoza (lperniaespinoza@student.eae.es)
+[Madrid, Marzo 2023]
 
+RESUMEN
+Tradicionalmente los equipos de recursos humanos se encuentran detrás del resto de las funciones dentro de la organización en relación con la integración de la analítica de datos en sus procesos de negocio. Este trabajo discute la oportunidad para desarrollar una solución que permita a los equipos de recursos humanos tomar acciones data driven. De esta forma, se conceptualiza una solución que cubra diferentes casos de uso dentro de esta área de la empresa así como el desarrollo de una prueba de concepto que permita demostrar la funcionalidad y valor que la solución añadiría en diferentes procesos como la evaluación de personal o el diseño de estrategias de retención de empleados.
+Palabras clave: people analytics, recursos humanos, analítica, empleados.
 
-Goal:
- To Predict The Future Employee Who Would Tend To Leave The Company.
+ABSTRACT
+Traditionally HR teams lag behind the rest of the functions within the organization with respect to integrating data analytics into their business processes. This paper discusses the opportunity to develop a solution that enables HR teams to take a data driven approach. Additionally, a solution is conceptualized to cover different use cases within this area of the company as well as the development of a proof of concept to demonstrate the functionality and value that the solution would add in different processes, such as personnel evaluation or the design of employee retention strategies.
+Key-words: people analytics, human resources, data analytics, employees.
 
-Data: https://www.dropbox.com/s/we2aj8k6ra7ca5o/Hash-Analytic-Python-Analytics-Problem-case-study-1.xlsx?dl=0
-
-Employee attrition is defined as the natural process by which employees leave the workforce – for example, through resignation for personal reasons or retirement – and are not immediately replaced.
-
-Employee attrition occurs when the size of your workforce diminishes over time due to unavoidable factors such as employee resignation for personal or professional reasons.
-Employees are leaving the workforce faster than they are hired, and it is often outside the employer’s control. For example, let’s say that you have opened a new office designated as the Sales Hub for your company. Every salesperson must work out of this office – but a few employees cannot relocate and choose to leave the company. This is a typical reason for employee attrition.
-But there are other reasons for attrition as well, including the lack of professional growth, a hostile work environment, or declining confidence in the company’s market value. Weak leadership is another factor that often drives attrition among employees.
-
-Step by Step process in Building the App:
-1)	Build the Machine Learning Model In Python
-2)	Build the Web app using Streamlit
-3)	 Deploying the Code to host the web application
-
-	a)	Create a GitHub repository to store the Code and the requirement file
-	b)	Request A invite from Streamlit sharing
-	c)	Deploy the Code on Streamlit Sharing.
-
-
-1) Building the Machine Learning Algorithm:
-The following Steps were taking in building the machine Learning Algorithm.
-a)	Data  Pre-processing
-The data was downloaded and the imported into the python Environment with aid of the NumPy and pandas libraries. The existing employee dataset and the employee who have left dataset was collected. The two dataset was concatenated to from and single data set, the Employee who have left was assign a label value 1(Target variable Churn), while the existing employee was assigned a label value 0(Target variable Churn)Next, we check for missing values, no missing values was found. 
-
-b)	 Exploratory Data Analysis
-We perform EDA to give us insight into the dataset. Numerical Descriptive data analysis was performed and Visualization. We also check for the distribution of all the features in the dataset, we found that all of the features are not distributed normally, as thus we decided to use the Non parametric machine learning Algorithm in modeling the dataset
-
-c)	 Splitting the data into train and test set
-The training dataset was used in training the different machine learning algorithm considered while the test set will be used in Evaluation of the model performance.
-
-d)	Training the Data
-The following Non parametric machine learning Algorithm was used
-SVM, Random Forest, Decision Tree, K nearest Neighbor Algorithm
-
-e)	Evaluation
-The choice of the model was based on the accuracy score and the Kohen kappa value after evaluating the model. Since the data is an unbalanced dataset major weight was given to the Cohen kappa statistics
-f)	Prediction
-The Prediction is based on input collected by the user of the machine learning algorithm which was made possible by Streamlit.
-
-
-
-2)  Building the web app using Streamlit
-The Streamlit library was implement inside the machine learning code to build the web application. The major function used are 
-st.header() for creating header inside the web application
-st.subheader() for creating sub header inside of the web application
-st.write() for writing text information inside the dataset
-st.image() for putting images inside the web application
-st.dataframes() for putting table inside   the web application
-if st.button() for creating web button where user can click in the web page.
-
-3) Deploying the Code to host the web application on Streamlit share
-a) Code Repository 
-i) Create a GitHub account to manage and organized your code,
-ii) Create a GitHub repository to store your code, README the requirement.txt file. 
-The requirement.txt file should contain a list all the dependencies (Packages) required to run the python code successfully.
-For instance, for this project our requirement.txt contains the following
-
-numpy==1.18.5
-
-pandas==1.1.3
-
-matplotlib==3.3.2
-
-seaborn==0.10.1
-
-streamlit==0.69.2
-
-Pillow==7.2.0
-
-scikit-learn==0.23.2
-
-xlrd >= 1.0.0
-
-
-b) Create a Streamlit Account: 
-
-	i) Request for an invite for Streamlit sharing or share.streamlit.io, the account provide should be the same email address with the GitHub account. After you have been invited by Streamlit share, login with the GitHub Account.
-	
-	2)  Click on New App 
-	
-		- enter your GitHub repository
-		
-		- Enter the branch- Main
-		
-		- Then type python code in the repository, eg. Streamlit_app.py
-		
-		-  Then Click deploy.
-		
-Hurray, Your App is Up and Running.
-
+El repositorio de datos obtenido a través de GitHub se presenta en formato CSV, el cual es ampliamente utilizado para almacenar información.
+Este tipo de archivo presenta cada registro de datos en una línea, separando sus campos mediante comas. La facilidad de uso y comprensión de este formato lo convierte en una elección popular para intercambiar información entre distintas aplicaciones de software.
+El formato CSV permite representar los datos en una tabla, de manera similar a una hoja de cálculo. En esta estructura, cada fila del archivo representa un registro de entrada, mientras que las columnas representan las diferentes características de dicha entrada. Esta disposición
+facilita el acceso y análisis de la información almacenada en el repositorio, lo que puede resultar de gran utilidad para la toma de decisiones y la optimización de procesos empresariales.
+Debido a la facilidad de uso de este formato, los datos obtenidos fueron cargados directamente en el cuaderno de trabajo de Python mediante las funciones de lectura de archivos, integrada en la librería pandas de python, que será explicada detalladamente en puntos posteriores.
+En el futuro, la solución permitirá la carga de datos de diferentes fuentes, como sistemas de ERP o de gestión de empleados como Workday mediante API así como la carga manual por parte del usuario.
