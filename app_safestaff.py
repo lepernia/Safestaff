@@ -272,8 +272,6 @@ y3_pred = reg.predict(X3_test)
 print('Error cuadrático medio: %.2f' % mean_squared_error(y3_test, y3_pred))
 print('Coeficiente de determinación: %.2f' % r2_score(y3_test, y3_pred))
 
-
-
 ################ APP SAFESTAPP PEOPLE ANALITYCS ######################## 
 
 #cuerpo principal
@@ -288,6 +286,12 @@ st.image(image,use_column_width=True)
 st.write("""
          # Aplicación para predecir el abandono del personal de tu organización #
          """)  
+
+# Inicializar la variable auxiliar
+button_pressed = False
+
+# Crear boton "Quienes somos" 
+
 if st.button("Quienes somos"):
     image2 = Image.open("Logo_EAE.png")
     new_size2 = (150,50)
@@ -297,18 +301,13 @@ if st.button("Quienes somos"):
         Name: Grupo de creadores - Proyecto EAE Business School
             
         Huwen Ely Armone Petrovich 
-        
         Laura María Extremera Díez
-        
         Silvia Patricia Fernández Jaudenes
-        
         Diego Ortíz Boyano 
-        
         Leonardo Pernía Espinoza
          """)
-st.header(
-   """Atributos con mayor relación""")
-st.pyplot(fig1.figure) # grafico de correlación en el cuerpo de la app
+
+
 
 
 # lateral
@@ -317,19 +316,26 @@ data_up= st.sidebar.file_uploader('Upload file', type="csv")
 st.sidebar.header('Ingrese los valores de entrada')    
 st.sidebar.subheader("""Indicar las características del perfil""")
 
+##
+if data_up is not None:
+    st.header(
+   """Atributos con mayor relación""")
+    st.pyplot(fig1.figure) # grafico de correlación en el cuerpo de la app
+
 ## 
-st.header(
+    st.header(
    """Clasificación empleados"""
    )
 # =============================================================================
+if data_up is not None:
 # ## Chart
-fig1,ax= plt.subplots(figsize=(12,5))
-ax.bar(left['Department'].value_counts().index,left['Department'].value_counts().values)
-plt.ylabel("Nro. empleados que han abandonado la organización")
-plt.xlabel("Departamentos")
-plt.title("Volumen de empleados por departamento")
-plt.grid()
-st.pyplot(fig1)
+    fig1,ax= plt.subplots(figsize=(12,5))
+    ax.bar(left['Department'].value_counts().index,left['Department'].value_counts().values)
+    plt.ylabel("Nro. empleados que han abandonado la organización")
+    plt.xlabel("Departamentos")
+    plt.title("Volumen de empleados por departamento")
+    plt.grid()
+    st.pyplot(fig1)
 # =============================================================================
 
 def user_input():
