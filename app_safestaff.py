@@ -243,7 +243,7 @@ cluster_data = df_clust[['satisfaction_level', 'last_evaluation', 'number_projec
 df_clust["Department"] = pd.factorize(df_clust["Department"])[0]
 #plt.figure(figsize=(12,9))
 fig1 = sns.heatmap(cluster_data.corr(),annot=True)
-plt.title('Correlation Heatmap',fontsize=10)
+plt.title('Relación de atributos',fontsize=10)
 plt.yticks(rotation =0)
 
 ########### MODELO 2 entrenamiento tiempo de abandono ########
@@ -300,15 +300,16 @@ if st.button("Quienes somos"):
     st.write("""
         Name: Grupo de creadores - Proyecto EAE Business School
             
-        Huwen Ely Armone Petrovich 
+        Huwen Ely Armone Petrovich
+        
         Laura María Extremera Díez
+        
         Silvia Patricia Fernández Jaudenes
+        
         Diego Ortíz Boyano 
+        
         Leonardo Pernía Espinoza
          """)
-
-
-
 
 # lateral
 st.sidebar.image("logo_safestaff.png", use_column_width=True)
@@ -329,25 +330,49 @@ if data_up is not None:
 # =============================================================================
 if data_up is not None:
 # ## Chart
-    fig1,ax= plt.subplots(figsize=(12,5))
-    ax.bar(left['Department'].value_counts().index,left['Department'].value_counts().values)
-    plt.ylabel("Nro. empleados que han abandonado la organización")
-    plt.xlabel("Departamentos")
-    plt.title("Volumen de empleados por departamento")
-    plt.grid()
-    st.pyplot(fig1)
+
+#     fig1,ax= plt.subplots(figsize=(12,5))
+#     ax.bar(left['Department'].value_counts().index,left['Department'].value_counts().values)
+   
+#     # Define las etiquetas para cada valor del eje X
+#     etiquetas = ["Ventas","Técnico","Soporte","IT","RRHH","Contabilidad","Marketing","Producción","randD","Administración"]
+
+# # Utiliza el método set_xticklabels() para asignar las etiquetas a los valores del eje X
+#     ax.set_xticklabels(etiquetas)
+
+# # Rota las etiquetas en caso de que sean muy largas para que se ajusten correctamente
+#     plt.xticks(rotation=90)
+
+    
+    # plt.ylabel("Nro. empleados que han abandonado la organización")
+    # plt.xlabel("Departamentos")
+    # plt.title("Volumen de empleados por departamento")
+    # plt.grid()
+    # st.pyplot(fig1)
+    
+
+    import plotly.express as px
+
+    data_attrition = pd.read_csv("existing_employee.csv",sep=",")
+
+    fig55 = px.bar(data_attrition, x="dept", y="satisfaction_level", color='dept', barmode='stack')
+
+    fig55.update_layout(title='Recurrencia e Abandono por Departamento', xaxis_title='Departamento', yaxis_title='Recurrencia de Abandono')
+
+    st.plotly_chart(fig55)
+
 # =============================================================================
 
 def user_input():
-    satisfaction_level = st.sidebar.number_input("satisfaction_level",min_value=1, max_value= 5,value=2)
-    last_evaluation = st.sidebar.number_input("last_evaluation",min_value=1, max_value= 5,value=3)
-    number_project =st.sidebar.number_input('number_project',min_value=0, max_value= 10,value=5)
-    average_montly_hours = st.sidebar.number_input('average_montly_hours',min_value=0, max_value= 350,value=160)
-    time_spend_company  = st.sidebar.number_input('time_spend_company',min_value=0, max_value= 20,value=5)
-    Work_accident =st.sidebar.selectbox('Work_accident',(0, 1))
-    promotion_last_5years = st.sidebar.selectbox('promotion_last_5years',(0, 1))
-    Department = st.sidebar.selectbox('Department',("Ventas","Técnico","Soporte","IT","RRHH","Contabilidad","Marketing","Producción","randD","Administración"))
-    salary =  st.sidebar.selectbox('salary',("low","medium","high"))
+    satisfaction_level = st.sidebar.number_input("Nivel de satisfacción",min_value=1, max_value= 100,value=45)
+    last_evaluation = st.sidebar.number_input("Puntuación ultima evaluación",min_value=1, max_value= 100,value=60)
+    number_project =st.sidebar.number_input('Participación proyectos al año',min_value=0, max_value= 10,value=5)
+    average_montly_hours = st.sidebar.number_input('Promedio horas trabajadas al mes',min_value=0, max_value= 350,value=160)
+    time_spend_company  = st.sidebar.number_input('Antiguedad en años',min_value=0, max_value= 20,value=5)
+    Work_accident =st.sidebar.selectbox('Acidentes laborales',("Si", "No"))
+    promotion_last_5years = st.sidebar.selectbox('Promoción los ultimos 5 años?',("Si", "No"))
+    Department = st.sidebar.selectbox('Departamento',("Ventas","Técnico","Soporte","IT","RRHH","Contabilidad","Marketing","Producción","randD","Administración"))
+    salary =  st.sidebar.selectbox('Nivel salarial', ("low","medium","high"))
     
     # Diccionario de entrada
     input_dict = {
@@ -382,25 +407,29 @@ for col in input_value.columns:
          le1_count += 1
 print('{} columns were label encoded.'.format(le1_count))
    
-
+result2 = None
 Prediction2 = reg.predict(input_value)
 if st.sidebar.button("Predecir"):
     Prediction = rforest.predict(input_value)
     if Prediction == 0:
-        result = pd.DataFrame({"Abandono?":Prediction,"Info":"El empleado no dejaría la organización"})
+        Prediction = "No"
+        result = pd.DataFrame({"Abandono?":Prediction,"Info":"El empleado no dejaría la organización"}, index=[0])
         #result2 = pd.DataFrame({"Info": "El empleado dejará la organización en", "Años": Prediction2 })
     else:   
-        result = pd.DataFrame({"Abandono?":Prediction,"Info":"El empleado dejará la organización"})                      
+          result = pd.DataFrame({"Abandono?":Prediction,"Info":"El empleado dejará la organización"}, index=[0])                            
+          result2 = pd.DataFrame({"Info": "El empleado dejará la organización en", "Años":Prediction2}, index=[0])
         
-        result2 = pd.DataFrame({"Años":Prediction2, "Info": "El empleado dejará la organización en"})
     st.write("""
              # Resultado de la clasificación:
                  """)
-    st.write(" Desgaste: ")  
+    
+    st.write("Desgaste:")  
     if Prediction == 0:
         st.dataframe(result)
-    else:
+    else:  
+        Prediction = "Si"
         st.dataframe(result)
-        st.dataframe(result2)
+        if result2 is not None:
+            st.dataframe(result2)
     
     
