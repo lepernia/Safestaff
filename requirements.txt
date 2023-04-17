@@ -5,3 +5,4 @@ matplotlib
 streamlit 
 xlrd >= 1.0.0
 scikit-learn
+plotly
