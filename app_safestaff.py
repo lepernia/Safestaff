@@ -15,7 +15,6 @@ import matplotlib
 import streamlit as st
 from PIL import Image
 import xlrd
-import plotly
 import plotly.express as px
 
 #SKlearn
