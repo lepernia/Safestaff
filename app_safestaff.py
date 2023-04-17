@@ -351,9 +351,6 @@ if data_up is not None:
     # plt.title("Volumen de empleados por departamento")
     # plt.grid()
     # st.pyplot(fig1)
-    
-
-    import plotly.express as px
 
     data_attrition = pd.read_csv("existing_employee.csv",sep=",")
 
@@ -418,8 +415,9 @@ if st.sidebar.button("Predecir"):
         result = pd.DataFrame({"Abandono?":Prediction,"Info":"El empleado no dejaría la organización"}, index=[0])
         #result2 = pd.DataFrame({"Info": "El empleado dejará la organización en", "Años": Prediction2 })
     else:   
-          result = pd.DataFrame({"Abandono?":Prediction,"Info":"El empleado dejará la organización"}, index=[0])                            
-          result2 = pd.DataFrame({"Info": "El empleado dejará la organización en", "Años":Prediction2}, index=[0])
+        Prediction = "Si"  
+        result = pd.DataFrame({"Abandono?":Prediction,"Info":"El empleado dejará la organización"}, index=[0])                            
+        result2 = pd.DataFrame({"Info": "El empleado dejará la organización en", "Años":Prediction2}, index=[0])
         
     st.write("""
              # Resultado de la clasificación:
@@ -429,7 +427,6 @@ if st.sidebar.button("Predecir"):
     if Prediction == 0:
         st.dataframe(result)
     else:  
-        Prediction = "Si"
         st.dataframe(result)
         if result2 is not None:
             st.dataframe(result2)
